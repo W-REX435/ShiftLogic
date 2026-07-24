@@ -1,17 +1,26 @@
 import React from "react";
-import { Sparkles, Terminal } from "lucide-react";
+import { Terminal } from "lucide-react";
 
 export default function Footer({ onAdminClick }) {
   return (
     <footer className="footer-section">
       <div className="container">
-        
         <div className="footer-top">
           <div className="footer-brand">
-            <span className="brand-title">SHIFT<span className="metallic-text">LOGIC</span></span>
+            <span className="brand-title">
+              SHIFT<span className="metallic-text">LOGIC</span>
+            </span>
             <p className="brand-tagline">
-              Engineering autonomous digital products and asset pipelines powered fully by artificial intelligence.
+              Premium digital products and custom AI automation. Built for creators and businesses.
             </p>
+          </div>
+          <div className="footer-links">
+            <h4 className="footer-heading">Site</h4>
+            <a href="#about" className="footer-link">About</a>
+            <a href="#services" className="footer-link">Services</a>
+            <a href="#portfolio" className="footer-link">Products</a>
+            <a href="#pricing" className="footer-link">Pricing</a>
+            <a href="#contact" className="footer-link">Contact</a>
           </div>
           <div className="footer-links">
             <h4 className="footer-heading">Legal</h4>
@@ -22,18 +31,14 @@ export default function Footer({ onAdminClick }) {
 
         <div className="footer-bottom">
           <div className="copyright-text">
-            © {new Date().getFullYear()} ShiftLogic. All rights reserved.
+            &copy; {new Date().getFullYear()} ShiftLogic. All rights reserved.
           </div>
-          
-          {/* Hidden Admin Access Button */}
           <div className="admin-access-wrapper">
-            <button className="admin-access-btn" onClick={onAdminClick}>
+            <button className="admin-access-btn" onClick={onAdminClick} aria-label="Admin access">
               <Terminal size={12} />
-              <span>Core System</span>
             </button>
           </div>
         </div>
-
       </div>
 
       <style>{`
@@ -54,41 +59,41 @@ export default function Footer({ onAdminClick }) {
         }
 
         .footer-brand {
-          max-width: 400px;
+          max-width: 340px;
         }
 
         .brand-title {
-          font-size: 1.5rem;
+          font-size: 1.4rem;
           font-weight: 800;
           color: var(--text-primary);
           display: block;
-          margin-bottom: 1rem;
+          margin-bottom: 0.75rem;
           letter-spacing: 0.05em;
         }
 
         .brand-tagline {
-          font-size: 0.95rem;
+          font-size: 0.9rem;
           line-height: 1.6;
           color: var(--text-secondary);
         }
 
         .footer-heading {
-          font-size: 0.88rem;
+          font-size: 0.8rem;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.1em;
           color: var(--text-primary);
-          margin-bottom: 1.25rem;
+          margin-bottom: 1.1rem;
         }
 
         .footer-links {
           display: flex;
           flex-direction: column;
-          gap: 0.75rem;
+          gap: 0.6rem;
         }
 
         .footer-link {
-          font-size: 0.92rem;
+          font-size: 0.9rem;
           color: var(--text-secondary);
           text-decoration: none;
           transition: color 0.2s ease;
@@ -109,30 +114,26 @@ export default function Footer({ onAdminClick }) {
         }
 
         .copyright-text {
-          font-size: 0.88rem;
+          font-size: 0.85rem;
           color: var(--text-muted);
         }
 
-        /* Semi-Hidden Login Access */
         .admin-access-wrapper {
-          opacity: 0.25;
-          transition: opacity 0.3s ease;
+          opacity: 0.08;
+          transition: opacity 0.5s ease;
         }
 
         .admin-access-wrapper:hover {
-          opacity: 1;
+          opacity: 0.5;
         }
 
         .admin-access-btn {
           background: transparent;
           border: none;
           color: var(--text-muted);
-          font-size: 0.75rem;
           cursor: pointer;
+          padding: 4px;
           display: flex;
-          align-items: center;
-          gap: 0.35rem;
-          font-family: monospace;
           transition: color 0.2s ease;
         }
 

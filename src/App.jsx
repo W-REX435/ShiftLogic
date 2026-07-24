@@ -3,7 +3,11 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import AboutUs from "./components/AboutUs";
 import Services from "./components/Services";
+import HowItWorks from "./components/HowItWorks";
 import Portfolio from "./components/Portfolio";
+import Pricing from "./components/Pricing";
+import ContactForm from "./components/ContactForm";
+import FAQ from "./components/FAQ";
 import Footer from "./components/Footer";
 import LoginModal from "./components/LoginModal";
 import Dashboard from "./components/Dashboard";
@@ -13,58 +17,38 @@ function App() {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
-  // Sync theme to DOM html tag
   useEffect(() => {
     const root = document.documentElement;
-    if (darkMode) {
-      root.setAttribute("data-theme", "dark");
-    } else {
-      root.setAttribute("data-theme", "light");
-    }
+    root.setAttribute("data-theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
-  const handleScrollToSection = (id) => {
+  const scrollTo = (id) => {
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Render Admin Dashboard or Public Pages
   if (isAdminLoggedIn) {
-    return (
-      <Dashboard 
-        onLogout={() => setIsAdminLoggedIn(false)} 
-      />
-    );
+    return <Dashboard onLogout={() => setIsAdminLoggedIn(false)} />;
   }
 
   return (
     <div className="app-shell">
-      {/* Navigation */}
-      <Header 
-        darkMode={darkMode} 
-        setDarkMode={setDarkMode} 
-      />
-
-      {/* Main Pages */}
+      <Header darkMode={darkMode} setDarkMode={setDarkMode} />
       <main>
-        <Hero 
-          onExploreClick={() => handleScrollToSection("portfolio")}
-          onCustomClick={() => handleScrollToSection("services")}
+        <Hero
+          onExploreClick={() => scrollTo("portfolio")}
+          onCustomClick={() => scrollTo("contact")}
         />
         <AboutUs />
         <Services />
+        <HowItWorks />
         <Portfolio />
+        <Pricing />
+        <ContactForm />
+        <FAQ />
       </main>
-
-      {/* Footer */}
-      <Footer 
-        onAdminClick={() => setIsLoginModalOpen(true)} 
-      />
-
-      {/* Security Authorization Gate */}
-      <LoginModal 
+      <Footer onAdminClick={() => setIsLoginModalOpen(true)} />
+      <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
         onLoginSuccess={() => setIsAdminLoggedIn(true)}

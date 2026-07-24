@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { 
-  LayoutDashboard, Boxes, Mail, Bot, LogOut, ArrowUpRight, 
-  Activity, Users, Send, RefreshCw, ChevronRight, CheckCircle,
-  FileText, Sparkles, Terminal, ArrowRight, UserPlus
+import {
+  LayoutDashboard, Boxes, Mail, Bot, LogOut,
+  Send, RefreshCw, Sparkles, Terminal
 } from "lucide-react";
-import { revenueMetrics, chartData, recentActivity, supportInbox, aiEmployees } from "../utils/mockData";
+import { revenueMetrics, recentActivity, supportInbox, aiEmployees } from "../utils/mockData";
 
 export default function Dashboard({ onLogout }) {
   const [activeTab, setActiveTab] = useState("overview");

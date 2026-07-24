@@ -1,25 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Sun, Moon, Menu, X, ShieldAlert } from "lucide-react";
+import { Sun, Moon, Menu, X } from "lucide-react";
 
-export default function Header({ darkMode, setDarkMode, onAdminClick }) {
+export default function Header({ darkMode, setDarkMode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-  };
 
   const handleNavClick = (id) => {
     setMobileMenuOpen(false);
@@ -29,15 +21,21 @@ export default function Header({ darkMode, setDarkMode, onAdminClick }) {
     }
   };
 
+  const navItems = [
+    { id: "about", label: "About" },
+    { id: "services", label: "Services" },
+    { id: "how-it-works", label: "Process" },
+    { id: "portfolio", label: "Products" },
+    { id: "pricing", label: "Pricing" },
+  ];
+
   return (
     <header className={`header ${scrolled ? "scrolled" : ""}`}>
       <div className="header-container">
-        {/* SVG Silver Logo & Name */}
         <div className="logo-group" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
           <div className="logo-wrapper">
             <svg viewBox="0 0 500 500" className="logo-svg">
               <defs>
-                {/* 3D chiseled metal gradients */}
                 <linearGradient id="metal-light" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#ffffff" />
                   <stop offset="35%" stopColor="#eceef4" />
@@ -54,16 +52,8 @@ export default function Header({ darkMode, setDarkMode, onAdminClick }) {
                 </filter>
               </defs>
               <g filter="url(#chisel-shadow)">
-                {/* Left/Top Facet (light reflection) */}
-                <path 
-                  d="M 380,135 L 125,230 L 255,230 L 245,310 Z" 
-                  fill="url(#metal-light)" 
-                />
-                {/* Right/Bottom Facet (shadow cast) */}
-                <path 
-                  d="M 380,135 L 245,310 L 140,400 L 350,310 Z" 
-                  fill="url(#metal-dark)" 
-                />
+                <path d="M 380,135 L 125,230 L 255,230 L 245,310 Z" fill="url(#metal-light)" />
+                <path d="M 380,135 L 245,310 L 140,400 L 350,310 Z" fill="url(#metal-dark)" />
               </g>
             </svg>
           </div>
@@ -72,42 +62,43 @@ export default function Header({ darkMode, setDarkMode, onAdminClick }) {
           </span>
         </div>
 
-        {/* Desktop Navigation */}
         <nav className="desktop-nav">
-          <button onClick={() => handleNavClick("about")} className="nav-link">About Us</button>
-          <button onClick={() => handleNavClick("services")} className="nav-link">Services</button>
-          <button onClick={() => handleNavClick("portfolio")} className="nav-link">Portfolio</button>
-          
-          <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle Theme">
+          {navItems.map((item) => (
+            <button key={item.id} onClick={() => handleNavClick(item.id)} className="nav-link">
+              {item.label}
+            </button>
+          ))}
+          <button
+            onClick={() => handleNavClick("contact")}
+            className="shimmer-button nav-cta-btn"
+          >
+            Get Started
+          </button>
+          <button onClick={() => setDarkMode(!darkMode)} className="theme-toggle" aria-label="Toggle theme">
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
         </nav>
 
-        {/* Mobile Nav Button */}
         <div className="mobile-actions">
-          <button onClick={toggleTheme} className="theme-toggle mobile-theme-btn" aria-label="Toggle Theme">
+          <button onClick={() => setDarkMode(!darkMode)} className="theme-toggle mobile-theme-btn" aria-label="Toggle theme">
             {darkMode ? <Sun size={18} /> : <Moon size={18} />}
           </button>
-          <button 
-            className="mobile-menu-btn" 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle Menu"
-          >
+          <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Toggle menu">
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
         <div className="mobile-menu glass-card">
-          <button onClick={() => handleNavClick("about")} className="mobile-nav-link">About Us</button>
-          <button onClick={() => handleNavClick("services")} className="mobile-nav-link">Services</button>
-          <button onClick={() => handleNavClick("portfolio")} className="mobile-nav-link">Portfolio</button>
+          {[...navItems, { id: "contact", label: "Get Started" }].map((item) => (
+            <button key={item.id} onClick={() => handleNavClick(item.id)} className="mobile-nav-link">
+              {item.label}
+            </button>
+          ))}
         </div>
       )}
 
-      {/* Embedded CSS for Header */}
       <style>{`
         .header {
           position: fixed;
@@ -188,14 +179,14 @@ export default function Header({ darkMode, setDarkMode, onAdminClick }) {
         .desktop-nav {
           display: flex;
           align-items: center;
-          gap: 2rem;
+          gap: 1.75rem;
         }
 
         .nav-link {
           background: transparent;
           border: none;
           color: var(--text-secondary);
-          font-size: 0.95rem;
+          font-size: 0.9rem;
           font-weight: 500;
           cursor: pointer;
           position: relative;
@@ -220,6 +211,11 @@ export default function Header({ darkMode, setDarkMode, onAdminClick }) {
 
         .nav-link:hover::after {
           width: 100%;
+        }
+
+        .nav-cta-btn {
+          padding: 0.55rem 1.25rem !important;
+          font-size: 0.85rem;
         }
 
         .theme-toggle {
@@ -263,7 +259,7 @@ export default function Header({ darkMode, setDarkMode, onAdminClick }) {
           padding: 1.5rem;
           display: flex;
           flex-direction: column;
-          gap: 1rem;
+          gap: 0.75rem;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
           z-index: 999;
         }
@@ -272,7 +268,7 @@ export default function Header({ darkMode, setDarkMode, onAdminClick }) {
           background: transparent;
           border: none;
           color: var(--text-primary);
-          font-size: 1.1rem;
+          font-size: 1.05rem;
           font-weight: 500;
           text-align: left;
           padding: 0.75rem 0;

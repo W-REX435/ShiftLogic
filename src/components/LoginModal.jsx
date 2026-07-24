@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Lock, Unlock, ShieldAlert, X } from "lucide-react";
 
 export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
   const [passcode, setPasscode] = useState("");
   const [error, setError] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const wasOpen = useRef(false);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !wasOpen.current) {
       setPasscode("");
       setError(false);
       setIsUnlocked(false);
+    }
+    wasOpen.current = isOpen;
+
+    if (isOpen) {
       document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
     }
     return () => { document.body.style.overflow = "unset"; };
   }, [isOpen]);
@@ -26,11 +29,10 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
       setTimeout(() => {
         onLoginSuccess();
         onClose();
-      }, 1000); // 1s delay for transition animation
+      }, 1000);
     } else {
       setError(true);
       setPasscode("");
-      // Flash error for 1.5s
       setTimeout(() => setError(false), 1500);
     }
   };
@@ -40,29 +42,25 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
   return (
     <div className="login-modal-overlay">
       <div className="login-modal-card glass-card">
-        
-        {/* Close Button */}
         <button className="modal-close-btn" onClick={onClose}>
           <X size={20} />
         </button>
 
-        {/* Lock Screen Header */}
         <div className="modal-header">
           <div className={`lock-icon-wrapper ${isUnlocked ? "unlocked" : ""} ${error ? "shake-error" : ""}`}>
             {isUnlocked ? <Unlock size={24} /> : <Lock size={24} />}
           </div>
           <h3 className="modal-title">System Authorization</h3>
           <p className="modal-subtitle">
-            Enter administrative credentials to access the ShiftLogic main core console.
+            Enter administrative credentials to access the core console.
           </p>
         </div>
 
-        {/* Passcode Form */}
         <form onSubmit={handleSubmit} className="passcode-form">
           <div className="input-group">
-            <input 
-              type="password" 
-              placeholder="••••••••••••"
+            <input
+              type="password"
+              placeholder="Enter passcode"
               value={passcode}
               onChange={(e) => setPasscode(e.target.value)}
               className={`passcode-input ${error ? "error-border" : ""}`}
@@ -85,18 +83,14 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
             </div>
           )}
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="shimmer-button auth-submit-btn"
             disabled={isUnlocked}
           >
             {isUnlocked ? "Decrypting..." : "Access Core Terminal"}
           </button>
         </form>
-
-        {/* Help Tip */}
-        <span className="passcode-hint">Hint: enter `shiftlogic2026` to bypass</span>
-
       </div>
 
       <style>{`
@@ -121,7 +115,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
 
         .login-modal-card {
           width: 100%;
-          max-width: 440px;
+          max-width: 420px;
           padding: 3rem 2.5rem;
           text-align: center;
           border-radius: 24px;
@@ -222,10 +216,9 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
           border: 1px solid var(--border-color);
           border-radius: 10px;
           padding: 1rem;
-          font-size: 1.25rem;
+          font-size: 1.1rem;
           color: var(--text-primary);
           text-align: center;
-          letter-spacing: 0.25em;
           outline: none;
           transition: border-color 0.2s ease;
         }
@@ -265,14 +258,6 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
           width: 100%;
           padding: 1rem !important;
           font-size: 0.95rem;
-        }
-
-        .passcode-hint {
-          display: block;
-          font-size: 0.75rem;
-          color: var(--text-muted);
-          font-family: monospace;
-          margin-top: 1.5rem;
         }
       `}</style>
     </div>
